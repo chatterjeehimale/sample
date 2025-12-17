@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Attendance Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            font-family: "Inter", "Segoe UI", Roboto, Arial, sans-serif;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: #0f172a;
+            color: #fff;
+            min-height: 100vh;
+            position: fixed;
+            padding: 25px 15px;
+        }
+
+        .sidebar h4 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 700;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #cbd5f5;
+            text-decoration: none;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: #2563eb;
+            color: #fff;
+        }
+
+        .main-content {
+            margin-left: 270px;
+            padding: 30px;
+        }
+
+        .card {
+            border: none;
+            border-radius: 18px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 25px;
+        }
+
+        .stat-card h2 {
+            font-weight: 700;
+            color: #2563eb;
+        }
+
+        .table-container {
+            margin-top: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                position: relative;
+                width: 100%;
+                min-height: auto;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+    <h4>Face Attendance</h4>
+    <a href="#" class="active">Dashboard</a>
+    <a href="#">Take Attendance</a>
+    <a href="#">Registration</a>
+    <a href="#analysis">Analysis</a>
+    <a href="#">Students</a>
+    <a href="#">Reports</a>
+    <a href="#">Settings</a>
+</div>
+
+<!-- Main Content -->
+<div class="main-content">
+
+    <h3 class="mb-4">Dashboard Overview</h3>
+
+    <!-- Statistics -->
+    <div class="row g-4">
+        <div class="col-md-3">
+            <div class="card stat-card">
+                <h2>120</h2>
+                <p>Total Students</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card stat-card">
+                <h2>98</h2>
+                <p>Present Today</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card stat-card">
+                <h2>22</h2>
+                <p>Absent Today</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card stat-card">
+                <h2>81%</h2>
+                <p>Attendance Rate</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Attendance Table -->
+    <div class="table-container">
+        <div class="card p-4">
+            <h5 class="mb-3">Recent Attendance</h5>
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Student Name</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Rahul Sharma</td>
+                        <td>17 Dec 2025</td>
+                        <td>09:15 AM</td>
+                        <td><span class="badge bg-success">Present</span></td>
+                    </tr>
+                    <tr>
+                        <td>Ananya Das</td>
+                        <td>17 Dec 2025</td>
+                        <td>09:16 AM</td>
+                        <td><span class="badge bg-success">Present</span></td>
+                    </tr>
+                    <tr>
+                        <td>Amit Verma</td>
+                        <td>17 Dec 2025</td>
+                        <td>—</td>
+                        <td><span class="badge bg-danger">Absent</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <!-- Attendance Analysis Section (Admin Only) -->
+    <div id="analysis" class="mt-5">
+        <h3 class="mb-4">Attendance Analysis</h3>
+
+        <!-- Filters -->
+        <div class="card p-4 mb-4">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-4">
+                    <label class="form-label">Maximum Strength</label>
+                    <input type="number" class="form-control" id="maxStrength" value="49" min="1">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Select Date</label>
+                    <input type="date" class="form-control" id="dateFilter">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Select Subject</label>
+                    <select class="form-select" id="subjectFilter">
+                        <option value="AI">Artificial Intelligence</option>
+                        <option value="ML">Machine Learning</option>
+                        <option value="DS">Data Science</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <button class="btn btn-primary w-100" onclick="updateChart()">Apply Filter</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bar Graph -->
+        <div class="card p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6 class="mb-0">Monthly Attendance</h6>
+                <button class="btn btn-outline-secondary btn-sm" onclick="exportPDF()">Export PDF</button>
+            </div>
+            <canvas id="attendanceBar"></canvas>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+// ---- Admin Only Access (Demo) ----
+const isAdmin = true; // change to false to test
+if (!isAdmin) {
+    document.getElementById('analysis').style.display = 'none';
+}
+
+// ---- Bar Chart ----
+const ctx = document.getElementById('attendanceBar');
+let attendanceChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+        datasets: [{
+            label: 'Students Present',
+            data: [42, 45, 47, 44],
+            maxBarThickness: 60
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true,
+                max: getMaxStrength()
+            }
+        }
+    }
+});
+
+// ---- Filter Logic (Demo Data) ----
+function getMaxStrength() {
+    return parseInt(document.getElementById('maxStrength').value) || 49;
+}
+
+function updateChart() {
+    const max = getMaxStrength();
+    const randomData = Array.from({length: 4}, () => Math.floor(Math.random() * max));
+    attendanceChart.options.scales.y.max = max;
+    attendanceChart.data.datasets[0].data = randomData;
+    attendanceChart.update();
+}
+
+// ---- Export to PDF ----
+function exportPDF() {
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF();
+    pdf.text('Attendance Analysis Report', 20, 20);
+    pdf.addImage(attendanceChart.toBase64Image(), 'PNG', 15, 30, 180, 100);
+    pdf.save('attendance-report.pdf');
+}
+</script>
+
+</body>
+</html>
