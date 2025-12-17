@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Automatic Attendance</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+       /* ===============================
+   Global Professional Theme
+================================= */
+:root {
+    --primary: #0d6efd;
+    --primary-dark: #084298;
+    --bg-main: #f3f6fb;
+    --card-bg: #ffffff;
+    --text-main: #1f2937;
+    --text-muted: #6b7280;
+    --success: #198754;
+    --warning: #ffc107;
+    --info: #0dcaf0;
+    --radius-lg: 18px;
+    --radius-md: 12px;
+    --shadow-soft: 0 10px 25px rgba(0, 0, 0, 0.08);
+    --shadow-strong: 0 25px 45px rgba(0, 0, 0, 0.15);
+}
+
+/* ===============================
+   Page Background
+================================= */
+body {
+    background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+    font-family: "Inter", "Segoe UI", Roboto, Arial, sans-serif;
+    min-height: 100vh;
+    color: #1f2937; /* dark readable text */
+}
+
+/* ===============================
+   Main Container Styling
+================================= */
+.container {
+    max-width: 520px;
+    padding: 34px 30px;
+    border-radius: var(--radius-lg);
+
+    /* Glass effect */
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(6px);
+    border-radius: 18px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+}
+
+/* ===============================
+   Heading & Text
+================================= */
+h2 {
+    
+    margin-bottom: 8px;
+    letter-spacing: 0.4px;
+    color: #ffffff !important;
+    font-weight: 700; 
+    color: #0d6efd !important;
+    
+}
+
+p.text-muted {
+    color: rgba(255, 255, 255, 0.75);
+}
+.text-muted {
+    color: #475569 !important;
+}
+
+/* ===============================
+   Camera View
+================================= */
+#video {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-lg);
+    border: 4px solid var(--primary);
+    background-color: #000;
+    box-shadow: var(--shadow-soft);
+    margin-top: 10px;
+    animation: cameraPulse 2.2s infinite ease-in-out;
+}
+
+/* Subtle camera scanning glow */
+@keyframes cameraPulse {
+    0% {
+        box-shadow: 0 0 0 rgba(13, 110, 253, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 22px rgba(13, 110, 253, 0.65);
+    }
+    100% {
+        box-shadow: 0 0 0 rgba(13, 110, 253, 0.4);
+    }
+}
+
+/* ===============================
+   Status / Alert Box
+================================= */
+#status-box {
+    margin-top: 26px;
+    padding: 16px 20px;
+    border-radius: var(--radius-md);
+    font-size: 0.95rem;
+    font-weight: 500;
+
+    background: rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+
+    box-shadow: var(--shadow-soft);
+    transition: all 0.35s ease;
+    color: #ffffff;
+    color: #1f2937 !important;  /* dark text */
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid #e5e7eb;
+
+    
+}
+
+
+/* ===============================
+   Alert States (Bootstrap-safe)
+================================= */
+.alert-info {
+    background: #e0f2fe;
+    color: #075985 !important;
+}
+.alert-warning {
+    background: #fef3c7;
+    color: #78350f !important;
+}
+
+.alert-success {
+    background: #dcfce7;
+    color: #14532d !important;
+}
+
+.alert-success b {
+    background: rgba(34, 197, 94, 0.25);
+    color: #dcfce7;
+}
+#status-box.alert-info::before {
+    content: "🔍 ";
+    display: inline-block;
+    animation: iconPulse 1.5s infinite;
+}
+#status-box.alert-info::after {
+    content: "";
+    animation: dotsLong 2.5s steps(6, end) infinite;
+}
+
+
+/* ===============================
+   Center Alignment Enhancement
+================================= */
+.text-center {
+    text-align: center;
+}
+
+
+/* Icon pulse */
+@keyframes iconPulse {
+    0% { transform: scale(1); opacity: 0.6; }
+    50% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(1); opacity: 0.6; }
+}
+
+/* Scanning dots */
+@keyframes dotsLong {
+    0%   { content: ""; }
+    16%  { content: "."; }
+    32%  { content: ".."; }
+    48%  { content: "..."; }
+    64%  { content: "...."; }
+    80%  { content: "....."; }
+    100% { content: "......"; }
+}
+/* Face scanning pulse */
+
+#status-box.alert-info {
+    animation: scanPulse 2s infinite;
+}
+
+@keyframes scanPulse {
+    0% {
+        box-shadow: 0 0 0 rgba(14, 165, 233, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 18px rgba(14, 165, 233, 0.9);
+    }
+    100% {
+        box-shadow: 0 0 0 rgba(14, 165, 233, 0.5);
+    }
+}
+
+/* ===============================
+   Responsive Adjustments
+================================= */
+@media (max-width: 576px) {
+    .container {
+        padding: 26px 22px;
+    }
+
+    h2 {
+        font-size: 1.45rem;
+    }
+}
+
+
+    </style>
+</head>
+<body class="bg-light">
+
+<div class="container text-center mt-5">
+    <h2 class="text-primary">Automatic Face Attendance</h2>
+    <p class="text-muted">Stand in front of the camera</p>
+
+    <video id="video" autoplay muted class="border border-3 rounded"></video>
+
+    <div id="status-box" class="alert alert-info mt-4">
+        Waiting for face...
+    </div>
+</div>
+
+<script>
+const video = document.getElementById('video');
+const statusBox = document.getElementById('status-box');
+let attendanceMarked = false;
+
+// Access webcam
+navigator.mediaDevices.getUserMedia({ video: true })
+    .then(stream => video.srcObject = stream)
+    .catch(err => statusBox.innerHTML = "Camera access denied!");
+
+// Capture frame every 3 seconds
+setInterval(async () => {
+    if (attendanceMarked) return;
+
+    const canvas = document.createElement('canvas');
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    canvas.getContext('2d').drawImage(video, 0, 0);
+
+    const imageData = canvas.toDataURL('image/jpeg');
+
+    const response = await fetch('/student/mark_attendance/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCSRFToken() },
+        body: JSON.stringify({ image: imageData })
+    });
+
+    const data = await response.json();
+
+    if (data.matched) {
+        attendanceMarked = true;
+        statusBox.className = "alert alert-success mt-4";
+        statusBox.innerHTML = `✅ Attendance marked for <b>${data.name}</b> at ${data.time}`;
+    } else {
+        statusBox.className = "alert alert-warning mt-4";
+        statusBox.innerHTML = "Scanning face... please hold still.";
+    }
+
+}, 3000);
+
+function getCSRFToken() {
+    return document.cookie.split('; ').find(row => row.startsWith('csrftoken=')).split('=')[1];
+}
+</script>
+
+</body>
+</html>
